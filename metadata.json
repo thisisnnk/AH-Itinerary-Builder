@@ -1,0 +1,8 @@
+{
+  "name": "Adventure Holidays Itinerary Builder",
+  "description": "Premium travel itinerary builder with sent quote tracking and keyword templates.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation"
+  ]
+}
