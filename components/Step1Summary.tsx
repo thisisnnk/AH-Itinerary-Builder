@@ -140,7 +140,7 @@ const Step1Summary: React.FC<Props> = ({ data, updateData }) => {
         <div className="flex justify-between items-center border-l-4 border-yellow-400 pl-4">
            <h3 className="text-sm font-normal text-slate-400">6. Costing</h3>
            <div className="flex items-center gap-3">
-              <span className="text-[11px] font-normal text-slate-400">Enable cost without food</span>
+              <span className="text-[11px] font-normal text-slate-400">Enable second cost slot</span>
               <label className="switch">
                 <input 
                   type="checkbox" 
@@ -151,17 +151,35 @@ const Step1Summary: React.FC<Props> = ({ data, updateData }) => {
               </label>
            </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="adv-input-group">
-            <label className="adv-label">Cost per head (With food)</label>
-            <input className="adv-input font-normal" placeholder="₹ 15,000" value={data.tripSummary.costWithFood} onChange={e => handleSummaryChange('costWithFood', e.target.value)} />
+        <div className="space-y-8 bg-slate-50/50 p-8 rounded-[24px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
+            <div className="adv-input-group mb-0">
+              <label className="adv-label">Cost slot 1 label</label>
+              <input className="adv-input font-normal" value={data.tripSummary.costWithFoodLabel} onChange={e => handleSummaryChange('costWithFoodLabel', e.target.value)} placeholder="e.g. Inclusive of all meals" />
+            </div>
+            <div className="adv-input-group mb-0">
+              <label className="adv-label">Price</label>
+              <input className="adv-input font-normal" placeholder="₹ 15,000" value={data.tripSummary.costWithFood} onChange={e => handleSummaryChange('costWithFood', e.target.value)} />
+            </div>
           </div>
+
           {data.tripSummary.hasNoFoodCost && (
-            <div className="adv-input-group animate-in fade-in slide-in-from-right-4">
-              <label className="adv-label">Cost per head (Without food)</label>
-              <input className="adv-input font-normal" placeholder="₹ 12,000" value={data.tripSummary.costWithoutFood} onChange={e => handleSummaryChange('costWithoutFood', e.target.value)} />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end animate-in fade-in slide-in-from-right-4">
+              <div className="adv-input-group mb-0">
+                <label className="adv-label">Cost slot 2 label</label>
+                <input className="adv-input font-normal" value={data.tripSummary.costWithoutFoodLabel} onChange={e => handleSummaryChange('costWithoutFoodLabel', e.target.value)} placeholder="e.g. Room & breakfast only" />
+              </div>
+              <div className="adv-input-group mb-0">
+                <label className="adv-label">Price</label>
+                <input className="adv-input font-normal" placeholder="₹ 12,000" value={data.tripSummary.costWithoutFood} onChange={e => handleSummaryChange('costWithoutFood', e.target.value)} />
+              </div>
             </div>
           )}
+
+          <div className="adv-input-group pt-4 border-t border-slate-200">
+            <label className="adv-label">Cost unit (Shown under price)</label>
+            <input className="adv-input font-normal max-w-xs" placeholder="e.g. Per Pax, Per Person" value={data.tripSummary.costUnit} onChange={e => handleSummaryChange('costUnit', e.target.value)} />
+          </div>
         </div>
       </section>
 

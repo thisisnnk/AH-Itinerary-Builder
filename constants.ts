@@ -52,7 +52,10 @@ export const INITIAL_ITINERARY_DATA = (id: string = ''): ItineraryData => ({
     destinations: [],
     transport: 'Private Vehicle',
     costWithFood: '',
+    costWithFoodLabel: 'Inclusive of all meals',
     costWithoutFood: '',
+    costWithoutFoodLabel: 'Room & breakfast only',
+    costUnit: 'Per Pax',
     hasNoFoodCost: true
   },
   itinerary: [
@@ -85,7 +88,6 @@ export const MOCK_ITINERARIES = (): ItineraryData[] => {
     const itin = INITIAL_ITINERARY_DATA(`mock-itin-${i}`);
     itin.quotationNumber = `AH26-${cat}-${type}-${String(i + 1).padStart(3, '0')}`;
     itin.tripSummary.leadTraveler = clients[i % clients.length];
-    // Example with 3 destinations
     itin.tripSummary.destinations = ['Munnar', 'Thekkady', 'Alleppey'];
     itin.tripSummary.duration = '3N/4D';
     itin.tripSummary.groupSize = (i % 4) + 2;

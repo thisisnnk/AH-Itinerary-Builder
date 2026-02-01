@@ -24,7 +24,10 @@ export interface TripSummary {
   destinations: string[];
   transport: string;
   costWithFood: string;
+  costWithFoodLabel: string;
   costWithoutFood: string;
+  costWithoutFoodLabel: string;
+  costUnit: string;
   hasNoFoodCost: boolean;
 }
 
