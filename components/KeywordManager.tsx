@@ -35,8 +35,9 @@ const KeywordManager: React.FC<Props> = ({ templates, onSave, onBack }) => {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm('Delete this template?')) {
-      onSave(templates.filter(t => t.id !== id));
+    if (window.confirm('Are you sure you want to delete this keyword template?')) {
+      const filtered = templates.filter(t => t.id !== id);
+      onSave(filtered);
     }
   };
 
@@ -60,7 +61,7 @@ const KeywordManager: React.FC<Props> = ({ templates, onSave, onBack }) => {
       </header>
 
       <div className="adv-card p-10 mb-12">
-        <h2 className="text-xl font-normal mb-8 text-[#050B20]">
+        <h2 className="text-2xl font-normal mb-8 text-[#050B20]">
           {editingId ? 'Edit template' : 'Add new template'}
         </h2>
         <div className="space-y-6">
@@ -99,14 +100,14 @@ const KeywordManager: React.FC<Props> = ({ templates, onSave, onBack }) => {
             </thead>
             <tbody>
               {templates.map((t) => (
-                <tr key={t.id}>
-                  <td className="font-normal text-base text-[#050B20] text-left pl-12">{t.keyword}</td>
-                  <td className="text-center">
+                <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
+                  <td className="font-normal text-base text-[#050B20] text-left pl-12 py-4">{t.keyword}</td>
+                  <td className="text-center py-4">
                     <div className="flex justify-center gap-2">
-                      <button onClick={() => handleEdit(t)} className="p-2 hover:bg-slate-100 rounded-lg text-[#050B20]/40">
+                      <button onClick={() => handleEdit(t)} className="p-2.5 hover:bg-slate-100 rounded-lg text-[#050B20]/40 transition-colors" title="Edit template">
                         <Edit2 size={16} />
                       </button>
-                      <button onClick={() => handleDelete(t.id)} className="p-2 hover:bg-red-50 rounded-lg text-red-400">
+                      <button onClick={() => handleDelete(t.id)} className="p-2.5 hover:bg-red-50 rounded-lg text-red-400 transition-colors" title="Delete template">
                         <Trash2 size={16} />
                       </button>
                     </div>

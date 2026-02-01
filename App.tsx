@@ -9,38 +9,46 @@ import KeywordManager from './components/KeywordManager';
 
 const App: React.FC = () => {
   const [view, setView] = useState<AppView>('dashboard');
-  const [itineraries, setItineraries] = useState<ItineraryData[]>([]);
-  const [templates, setTemplates] = useState<DayTemplate[]>([]);
+  
+  // Initialize state from localStorage or mocks
+  const [itineraries, setItineraries] = useState<ItineraryData[]>(() => {
+    const saved = localStorage.getItem('ah_itineraries_v3');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse itineraries", e);
+      }
+    }
+    const mocks = MOCK_ITINERARIES();
+    localStorage.setItem('ah_itineraries_v3', JSON.stringify(mocks));
+    return mocks;
+  });
+
+  const [templates, setTemplates] = useState<DayTemplate[]>(() => {
+    const saved = localStorage.getItem('ah_templates_v3');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse templates", e);
+      }
+    }
+    const mocks = MOCK_TEMPLATES;
+    localStorage.setItem('ah_templates_v3', JSON.stringify(mocks));
+    return mocks;
+  });
+
   const [currentItinerary, setCurrentItinerary] = useState<ItineraryData | null>(null);
 
+  // Persistence effects
   useEffect(() => {
-    const savedItins = localStorage.getItem('ah_itineraries_v3');
-    if (savedItins) {
-      setItineraries(JSON.parse(savedItins));
-    } else {
-      const mocks = MOCK_ITINERARIES();
-      setItineraries(mocks);
-      localStorage.setItem('ah_itineraries_v3', JSON.stringify(mocks));
-    }
+    localStorage.setItem('ah_itineraries_v3', JSON.stringify(itineraries));
+  }, [itineraries]);
 
-    const savedTemplates = localStorage.getItem('ah_templates_v3');
-    if (savedTemplates) {
-      setTemplates(JSON.parse(savedTemplates));
-    } else {
-      setTemplates(MOCK_TEMPLATES);
-      localStorage.setItem('ah_templates_v3', JSON.stringify(MOCK_TEMPLATES));
-    }
-  }, []);
-
-  const saveToDB = (list: ItineraryData[]) => {
-    setItineraries(list);
-    localStorage.setItem('ah_itineraries_v3', JSON.stringify(list));
-  };
-
-  const saveTemplatesToDB = (list: DayTemplate[]) => {
-    setTemplates(list);
-    localStorage.setItem('ah_templates_v3', JSON.stringify(list));
-  };
+  useEffect(() => {
+    localStorage.setItem('ah_templates_v3', JSON.stringify(templates));
+  }, [templates]);
 
   const handleCreate = () => {
     const newItin = INITIAL_ITINERARY_DATA();
@@ -60,30 +68,33 @@ const App: React.FC = () => {
       quotationNumber: itin.quotationNumber + '-COPY',
       tripSummary: { ...itin.tripSummary, leadTraveler: itin.tripSummary.leadTraveler + ' (Copy)' }
     };
-    saveToDB([copy, ...itineraries]);
+    setItineraries(prev => [copy, ...prev]);
   };
 
-  const handleDelete = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this itinerary?')) {
-      saveToDB(itineraries.filter(i => i.id !== id));
+  const handleDeleteItinerary = (id: string) => {
+    if (window.confirm('Are you sure you want to delete this itinerary? This action cannot be undone.')) {
+      setItineraries(prev => prev.filter(i => i.id !== id));
     }
   };
 
   const handleUpdateStatus = (id: string, status: any) => {
-    const updated = itineraries.map(i => i.id === id ? { ...i, status } : i);
-    saveToDB(updated);
+    setItineraries(prev => prev.map(i => i.id === id ? { ...i, status } : i));
   };
 
-  const handleSave = (itin: ItineraryData) => {
-    const exists = itineraries.find(i => i.id === itin.id);
-    let newList;
-    if (exists) {
-      newList = itineraries.map(i => i.id === itin.id ? itin : i);
-    } else {
-      newList = [itin, ...itineraries];
-    }
-    saveToDB(newList);
+  const handleSaveItinerary = (itin: ItineraryData) => {
+    setItineraries(prev => {
+      const exists = prev.find(i => i.id === itin.id);
+      if (exists) {
+        return prev.map(i => i.id === itin.id ? itin : i);
+      } else {
+        return [itin, ...prev];
+      }
+    });
     setView('dashboard');
+  };
+
+  const handleSaveTemplates = (updatedTemplates: DayTemplate[]) => {
+    setTemplates(updatedTemplates);
   };
 
   return (
@@ -94,7 +105,7 @@ const App: React.FC = () => {
           onCreate={handleCreate} 
           onEdit={handleEdit} 
           onCopy={handleCopy}
-          onDelete={handleDelete}
+          onDelete={handleDeleteItinerary}
           onStatusChange={handleUpdateStatus}
           onManageKeywords={() => setView('keywords')}
           onPreview={(itin) => {
@@ -107,7 +118,7 @@ const App: React.FC = () => {
       {view === 'keywords' && (
         <KeywordManager 
           templates={templates}
-          onSave={saveTemplatesToDB}
+          onSave={handleSaveTemplates}
           onBack={() => setView('dashboard')}
         />
       )}
@@ -115,7 +126,7 @@ const App: React.FC = () => {
       {view === 'editor' && currentItinerary && (
         <Editor 
           itinerary={currentItinerary} 
-          onSave={handleSave} 
+          onSave={handleSaveItinerary} 
           onCancel={() => setView('dashboard')}
           onPreview={(itin) => {
             setCurrentItinerary(itin);

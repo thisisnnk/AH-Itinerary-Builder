@@ -67,11 +67,11 @@ const Dashboard: React.FC<Props> = ({ itineraries, onCreate, onEdit, onCopy, onD
                     className="text-base font-normal text-[#050B20] py-6 cursor-pointer hover:brand-text-primary"
                     onClick={() => onPreview(itin)}
                   >
-                    <div className="flex items-center justify-center gap-3">
+                    <div className="flex items-center justify-start pl-8 gap-3">
                       <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[#050B20]/40 group-hover:bg-yellow-100 group-hover:text-yellow-600 transition-colors">
                         <User size={18} />
                       </div>
-                      <div className="flex flex-col items-start">
+                      <div className="flex flex-col items-start text-left">
                         <span className="text-base font-normal">{itin.tripSummary.leadTraveler}</span>
                         <span className="text-[10px] text-[#050B20]/40">{itin.quotationNumber}</span>
                       </div>

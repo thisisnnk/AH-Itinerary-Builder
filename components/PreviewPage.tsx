@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { ItineraryData } from '../types';
 import { 
   Printer, Edit2, ArrowLeft, MapPin, Calendar, Users, 
-  Briefcase, Phone, Mail, Navigation, Car, Heart, CheckCircle2, XCircle, CreditCard, Star, Clock, Globe 
+  Briefcase, Phone, Mail, Navigation, Car, Heart, CheckCircle2, XCircle, CreditCard, Star, Clock, Globe, Building, Plane 
 } from 'lucide-react';
 
 interface Props {
@@ -31,7 +30,7 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
   };
 
   const overviewCards = [
-    { icon: Briefcase, label: 'Travel consultant', val: data.tripSummary.consultant.name, sub: data.tripSummary.consultant.contact },
+    { icon: Briefcase, label: 'Travel consultant', val: data.tripSummary.consultant.name, sum: data.tripSummary.consultant.contact },
     { icon: MapPin, label: 'Destinations', val: data.tripSummary.destinations.join(', ') || 'Various' },
     { icon: Clock, label: 'Duration', val: data.tripSummary.duration || 'TBA' },
     { icon: Calendar, label: 'Date of travel', val: data.tripSummary.travelDate || 'Flexible' },
@@ -42,14 +41,14 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
   ];
 
   return (
-    <div className="bg-[#050B20] min-h-screen text-white font-['Poppins'] antialiased font-normal">
+    <div className="bg-[#01003d] min-h-screen text-white font-['Poppins'] antialiased font-normal">
       {/* Action Bar */}
-      <div className="no-print sticky top-0 z-50 apple-blur p-5 border-b border-white/5 flex justify-between items-center max-w-6xl mx-auto rounded-b-[32px] shadow-2xl px-10">
-        <button onClick={onBack} className="flex items-center gap-2 text-[#050B20] font-normal text-[11px] uppercase tracking-widest hover:opacity-70 transition-colors">
+      <div className="no-print apple-blur sticky top-0 z-50 p-5 border-b border-white/5 flex justify-between items-center max-w-6xl mx-auto rounded-b-[32px] shadow-2xl px-10">
+        <button onClick={onBack} className="flex items-center gap-2 text-[#01003d] font-normal text-[11px] uppercase tracking-widest hover:opacity-70 transition-colors">
           <ArrowLeft size={18} /> Dashboard
         </button>
         <div className="flex gap-4">
-          <button onClick={onEdit} className="p-4 bg-white border border-slate-100 rounded-2xl hover:bg-slate-50 shadow-sm transition-all text-[#050B20]">
+          <button onClick={onEdit} className="p-4 bg-white border border-slate-100 rounded-2xl hover:bg-slate-50 shadow-sm transition-all text-[#01003d]">
             <Edit2 size={24} />
           </button>
           <button onClick={() => window.print()} className="adv-btn-primary px-8 shadow-2xl font-normal">
@@ -58,47 +57,70 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
         </div>
       </div>
 
-      <div className="max-w-[1000px] mx-auto p-12 md:p-24 space-y-32 bg-[#050B20] border border-white/5" id="printable-area">
+      <div className="max-w-[1000px] mx-auto p-12 md:p-24 space-y-24 bg-[#01003d] border border-white/5" id="printable-area">
         
-        <header className="space-y-12 text-center py-20 transform scale-125 origin-top">
-          <img src="https://www.adventureholidays.co/logo.png" alt="Adventure holidays" className="h-48 mx-auto brightness-0 invert" />
-          <div className="space-y-4">
-            <p className="text-xl font-normal text-slate-400">Hey</p>
-            <h1 className="text-9xl font-normal tracking-tighter leading-none brand-text-primary uppercase">
-              {data.tripSummary.leadTraveler || 'Adventurer'}
-            </h1>
-            <p className="text-xl font-normal text-slate-400">here's your curated tour itinerary</p>
-          </div>
-          <div className="flex justify-center pt-8">
-            <span className="border-2 border-[#FECC00] text-[#FECC00] px-10 py-4 rounded-full text-sm font-normal uppercase tracking-[0.5em]">Reference: {data.quotationNumber}</span>
+        <header className="pt-24 pb-0 text-center">
+          <img 
+            src="https://www.adventureholidays.co/logo.png" 
+            alt="Adventure holidays" 
+            className="h-48 mx-auto mb-48" 
+          />
+          
+          <div className="space-y-6">
+            <p className="text-[31px] md:text-[41px] text-[#c9c8c7] font-['Gloock',serif] font-bold tracking-[0.1em] [font-variant:small-caps]">
+              Greetings from Adventure Holidays
+            </p>
+            
+            <div className="flex flex-col items-center">
+              <p className="text-xl md:text-2xl text-slate-400 font-normal leading-tight">
+                It is our heartfelt pleasure to present this quotation to
+              </p>
+
+              <h1 className="font-['Montserrat',sans-serif] font-black brand-text-primary uppercase tracking-tighter leading-none text-5xl md:text-7xl lg:text-[100px] px-4 break-words py-1">
+                {(data.tripSummary.leadTraveler || 'Valued Guest').toUpperCase()}
+              </h1>
+
+              <p className="text-xl md:text-2xl text-slate-400 font-normal leading-tight max-w-5xl mx-auto px-4">
+                We would be truly honoured to craft a journey filled with comfort, care, and unforgettable moments, tailored especially for you.
+              </p>
+            </div>
           </div>
         </header>
 
-        <section className="space-y-20 pt-40">
-          <h2 className="text-3xl font-normal uppercase tracking-[0.6em] text-slate-600 text-center">Journey overview</h2>
+        <section className="space-y-20 mt-20">
+          <h2 className="text-3xl font-black font-['Montserrat',sans-serif] uppercase tracking-[0.6em] text-slate-600 text-center">Journey overview</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
             {overviewCards.map((card, idx) => (
-              <div key={idx} className="p-10 bg-white/5 border border-white/10 rounded-[48px] flex flex-col justify-between">
-                <card.icon className="brand-text-primary mb-6" size={20} />
+              <div key={idx} className="p-10 bg-white/5 border border-white/10 rounded-[48px] flex flex-col gap-10">
+                <div className="flex items-center gap-5">
+                  <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/5">
+                    <card.icon className="brand-text-primary" size={28} />
+                  </div>
+                  <p className="text-2xl md:text-3xl font-normal text-slate-400 tracking-tight leading-tight">{card.label}</p>
+                </div>
                 <div>
-                  <p className="text-[12px] font-normal text-slate-400 mb-2">{card.label}</p>
-                  <p className="text-3xl font-normal leading-tight uppercase brand-text-primary">{card.val}</p>
-                  {card.sub && <p className="text-sm font-normal mt-2 text-slate-500">{card.sub}</p>}
+                  <p className="text-3xl md:text-4xl font-normal leading-tight uppercase brand-text-primary">{card.val}</p>
+                  {card.sum && <p className="text-sm font-normal mt-2 text-slate-500">{card.sum}</p>}
                 </div>
               </div>
             ))}
             
-            <div className="p-10 brand-bg-primary rounded-[48px] lg:col-span-2 flex flex-col justify-between shadow-2xl border-none">
-              <CreditCard className="text-[#050B20] mb-6" size={28} />
+            <div className="p-10 brand-bg-primary rounded-[48px] lg:col-span-2 flex flex-col gap-10 shadow-2xl border-none">
+              <div className="flex items-center gap-5">
+                <div className="w-14 h-14 rounded-2xl bg-[#01003d]/10 flex items-center justify-center">
+                  <CreditCard className="text-[#01003d]" size={32} />
+                </div>
+                <p className="text-2xl md:text-3xl font-normal text-[#01003d] tracking-tight leading-tight">Package cost</p>
+              </div>
               <div className="grid grid-cols-2 gap-8">
                 <div>
                   <p className="text-[12px] font-normal text-slate-800 mb-2">With food</p>
-                  <p className="text-5xl font-normal text-[#050B20]">{data.tripSummary.costWithFood || 'On request'}</p>
+                  <p className="text-5xl font-normal text-[#01003d]">{data.tripSummary.costWithFood || 'On request'}</p>
                 </div>
                 {data.tripSummary.hasNoFoodCost && (
                   <div>
                     <p className="text-[12px] font-normal text-slate-800 mb-2">Without food</p>
-                    <p className="text-5xl font-normal text-[#050B20]">{data.tripSummary.costWithoutFood || 'On request'}</p>
+                    <p className="text-5xl font-normal text-[#01003d]">{data.tripSummary.costWithoutFood || 'On request'}</p>
                   </div>
                 )}
               </div>
@@ -106,42 +128,48 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
           </div>
         </section>
 
-        <section className="space-y-48">
-          <h2 className="text-3xl font-normal uppercase tracking-[0.6em] text-slate-600 text-center">The experience</h2>
-          {data.itinerary.map((day, i) => (
-            (!day.isDisabled || day.day !== 0) && (
-              <div key={i} className="group border-b border-white/5 pb-32 last:border-0">
-                <div className="flex flex-col md:flex-row gap-24">
-                  <div className="shrink-0 text-center md:text-left min-w-[180px]">
-                    <div className="text-[150px] font-normal text-white/5 group-hover:brand-text-primary leading-none">{String(day.day).padStart(2, '0')}</div>
-                    <div className="text-[16px] font-normal text-slate-500 mt-4 uppercase tracking-[0.2em]">{getDayDate(day.day, day.date).formatted}</div>
-                    <div className="text-[14px] font-normal brand-text-primary mt-1 uppercase tracking-[0.1em]">{getDayDate(day.day, day.date).dayName}</div>
-                  </div>
-                  <div className="flex-1 space-y-12 pt-10">
-                    <h3 className="text-6xl font-normal text-white leading-tight uppercase tracking-tighter">{day.title || 'Adventure day'}</h3>
-                    <div className="space-y-8">
-                      {day.activities.map((act, j) => (
-                        act && (
-                          <div key={j} className="flex items-start gap-8 text-2xl text-slate-300 font-normal border-l-8 border-[#FECC00]/20 pl-8 group-hover:border-[#FECC00] leading-relaxed">
-                            {act}
-                          </div>
-                        )
-                      ))}
+        {/* Spacing between sections */}
+        <div className="pt-24"></div>
+
+        <section className="space-y-16">
+          <h2 className="text-3xl font-black font-['Montserrat',sans-serif] uppercase tracking-[0.6em] text-slate-600 text-center">The experience</h2>
+          <div className="space-y-48">
+            {data.itinerary.map((day, i) => (
+              (!day.isDisabled || day.day !== 0) && (
+                <div key={i} className="group border-b border-white/5 pb-32 last:border-0">
+                  <div className="flex flex-col md:flex-row gap-24">
+                    <div className="shrink-0 text-center md:text-left min-w-[180px]">
+                      {/* Increased visibility of day number */}
+                      <div className="text-[150px] font-black text-white/10 group-hover:brand-text-primary leading-none transition-colors duration-500">{String(day.day).padStart(2, '0')}</div>
+                      <div className="text-[16px] font-normal text-slate-500 mt-4 uppercase tracking-[0.2em]">{getDayDate(day.day, day.date).formatted}</div>
+                      <div className="text-[14px] font-normal brand-text-primary mt-1 uppercase tracking-[0.1em]">{getDayDate(day.day, day.date).dayName}</div>
                     </div>
-                    {day.images && day.images.length > 0 && (
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-8 pt-16">
-                        {day.images.map((img, k) => (
-                          <div key={k} className="aspect-[4/5] rounded-[48px] overflow-hidden shadow-2xl border-4 border-white/10">
-                            <img src={img} className="w-full h-full object-cover" alt="Travel capture" />
-                          </div>
+                    <div className="flex-1 space-y-12 pt-10">
+                      <h3 className="text-6xl font-normal text-white leading-tight uppercase tracking-tighter">{day.title || 'Adventure day'}</h3>
+                      <div className="space-y-8">
+                        {day.activities.map((act, j) => (
+                          act && (
+                            <div key={j} className="flex items-start gap-8 text-2xl text-slate-300 font-normal border-l-8 border-[#FECC00]/20 pl-8 group-hover:border-[#FECC00] leading-relaxed">
+                              {act}
+                            </div>
+                          )
                         ))}
                       </div>
-                    )}
+                      {day.images && day.images.length > 0 && (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 pt-16">
+                          {day.images.map((img, k) => (
+                            <div key={k} className="aspect-[4/5] rounded-[48px] overflow-hidden shadow-2xl border-4 border-white/10">
+                              <img src={img} className="w-full h-full object-cover" alt="Travel capture" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-          ))}
+              )
+            ))}
+          </div>
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-2 gap-24 py-32 border-y border-white/5">
@@ -173,9 +201,9 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
           </div>
         </section>
 
-        <section className="grid grid-cols-1 lg:grid-cols-2 gap-24 pt-10 font-normal">
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-24 py-10 font-normal">
            <div className="space-y-12">
-              <h4 className="text-4xl font-normal uppercase tracking-[0.3em] text-slate-700">Terms & conditions</h4>
+              <h4 className="text-4xl font-black font-['Montserrat',sans-serif] uppercase tracking-[0.3em] text-slate-700">Terms & conditions</h4>
               <div className="space-y-8">
                 {data.termsAndConditions.map((line, i) => (
                   <p key={i} className="text-xl text-slate-400 font-normal leading-relaxed border-l-4 border-white/5 pl-8">{line}</p>
@@ -183,7 +211,7 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
               </div>
            </div>
            <div className="space-y-12">
-              <h4 className="text-4xl font-normal uppercase tracking-[0.3em] text-slate-700">Cancellation policy</h4>
+              <h4 className="text-4xl font-black font-['Montserrat',sans-serif] uppercase tracking-[0.3em] text-slate-700">Cancellation policy</h4>
               <div className="space-y-8">
                 {data.cancellationPolicy.map((line, i) => (
                   <p key={i} className="text-xl text-red-400/80 font-normal leading-relaxed border-l-4 border-red-400/20 pl-8">{line}</p>
@@ -192,73 +220,74 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
            </div>
         </section>
 
-        <section className="bg-white/5 border border-white/10 p-20 rounded-[80px] space-y-16">
-           <div className="flex items-center gap-8">
-              <CreditCard className="brand-text-primary" size={48} />
-              <h3 className="text-4xl font-normal uppercase tracking-[0.3em]">Bank transfers</h3>
-           </div>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-              {[
-                { label: 'Bank name', value: data.bankDetails.bank },
-                { label: 'A/c name', value: data.bankDetails.accountName },
-                { label: 'A/c number', value: data.bankDetails.accountNumber },
-                { label: 'IFSC code', value: data.bankDetails.ifsc },
-              ].map((item, i) => (
-                <div key={i} className="space-y-3">
-                  <p className="text-[12px] font-normal text-slate-500">{item.label}</p>
-                  <p className="text-2xl font-normal brand-text-primary uppercase">{item.value}</p>
-                </div>
-              ))}
-           </div>
-        </section>
+        <footer className="pt-24 pb-32 border-t border-white/10">
+          <div className="max-w-6xl mx-auto space-y-20">
+            <div className="text-center space-y-6">
+              <h2 className="text-4xl md:text-5xl font-black font-['Montserrat',sans-serif] uppercase brand-text-primary">Ways to Reach us</h2>
+              <p className="text-xl md:text-2xl text-slate-400 font-normal leading-relaxed max-w-3xl mx-auto">
+                Have a question, a plan, or just an idea? Reach out to us anytime—we’re here to listen, guide, and make things happen together.
+              </p>
+            </div>
 
-        <footer className="pt-40">
-          <div className="p-24 bg-white/5 border border-white/10 rounded-[100px] text-white relative overflow-hidden text-center">
-            <div className="relative z-10 space-y-24">
-              <img src="https://www.adventureholidays.co/logo.png" alt="Logo" className="h-32 mx-auto brightness-0 invert" />
-              <h3 className="text-8xl font-normal leading-tight tracking-tighter uppercase">Find us <span className="brand-text-primary">here</span>.</h3>
-              
-              <div className="space-y-20">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-4xl mx-auto">
-                   <div className="flex flex-col items-center gap-6">
-                      <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-[#FECC00]">
-                        <Phone size={32} />
-                      </div>
-                      <p className="text-4xl font-normal uppercase">+91 70109 33178</p>
-                      <p className="text-[12px] font-normal text-slate-500">Contact number</p>
-                   </div>
-                   <div className="flex flex-col items-center gap-6">
-                      <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-[#FECC00]">
-                        <Mail size={32} />
-                      </div>
-                      <p className="text-3xl font-normal uppercase">contact@adventureholidays.co</p>
-                      <p className="text-[12px] font-normal text-slate-500">Official email</p>
-                   </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+              <div className="space-y-4 text-center">
+                <div className="flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10 mb-4 hover:border-yellow-400/50 transition-colors">
+                    <Phone className="brand-text-primary" size={24} />
+                  </div>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-4xl mx-auto pt-16 border-t border-white/5">
-                   <div className="flex flex-col items-center gap-6">
-                      <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-[#FECC00]">
-                        <Globe size={32} />
-                      </div>
-                      <p className="text-3xl font-normal uppercase">www.adventureholidays.co</p>
-                      <p className="text-[12px] font-normal text-slate-500">Our website</p>
-                   </div>
-                   <div className="flex flex-col items-center gap-6">
-                      <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center text-[#FECC00]">
-                        <Navigation size={32} />
-                      </div>
-                      <p className="text-2xl font-normal leading-snug max-w-xs mx-auto">
-                        2nd floor, Vishnu complex, Gandhipuram, Coimbatore
-                      </p>
-                      <p className="text-[12px] font-normal text-slate-500">Office location</p>
-                   </div>
-                </div>
+                <h3 className="text-xs uppercase tracking-[0.3em] text-slate-500 font-normal">Phone</h3>
+                <a href="tel:+917010933178" className="text-xl font-normal text-slate-300 hover:brand-text-primary transition-colors block">
+                  +91 70109 33178
+                </a>
               </div>
 
-              <div className="pt-24 border-t border-white/5 text-[12px] font-normal text-slate-600 uppercase tracking-[0.4em]">
-                Adventure holidays © 2024 • Build for exploration
+              <div className="space-y-4 text-center">
+                <div className="flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10 mb-4 hover:border-yellow-400/50 transition-colors">
+                    <Mail className="brand-text-primary" size={24} />
+                  </div>
+                </div>
+                <h3 className="text-xs uppercase tracking-[0.3em] text-slate-500 font-normal">Email</h3>
+                <a href="mailto:contact@adventureholidays.co" className="text-xl font-normal text-slate-300 hover:brand-text-primary transition-colors block break-words px-2">
+                  contact@adventureholidays.co
+                </a>
               </div>
+
+              <div className="space-y-4 text-center">
+                <div className="flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10 mb-4 hover:border-yellow-400/50 transition-colors">
+                    <Globe className="brand-text-primary" size={24} />
+                  </div>
+                </div>
+                <h3 className="text-xs uppercase tracking-[0.3em] text-slate-500 font-normal">Website</h3>
+                <a href="https://www.adventureholidays.co" target="_blank" rel="noopener noreferrer" className="text-xl font-normal text-slate-300 hover:brand-text-primary transition-colors block">
+                  www.adventureholidays.co
+                </a>
+              </div>
+
+              <div className="space-y-4 text-center">
+                <div className="flex justify-center">
+                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center border border-white/10 mb-4 hover:border-yellow-400/50 transition-colors">
+                    <MapPin className="brand-text-primary" size={24} />
+                  </div>
+                </div>
+                <h3 className="text-xs uppercase tracking-[0.3em] text-slate-500 font-normal">Location</h3>
+                <p className="text-xl font-normal text-slate-300 leading-relaxed px-2">
+                  2nd Floor, Vishnu Complex,<br/>
+                  1st Cross Street, Gandhipuram<br/>
+                  Coimbatore - 641012
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center pt-20">
+              <img 
+                src="https://www.adventureholidays.co/logo.png" 
+                alt="Adventure holidays" 
+                className="h-12 mx-auto opacity-30 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700" 
+              />
+              <p className="text-[10px] text-slate-600 uppercase tracking-[0.5em] mt-8">Adventure Holidays &copy; 2024</p>
             </div>
           </div>
         </footer>
@@ -266,7 +295,7 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
       </div>
       <style>{`
         @media print {
-          body { -webkit-print-color-adjust: exact; background: #050B20 !important; }
+          body { -webkit-print-color-adjust: exact; background: #01003d !important; }
           .no-print { display: none !important; }
           #printable-area { 
             box-shadow: none !important; 
@@ -276,12 +305,14 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
             width: 100% !important; 
             max-width: 100% !important; 
             border-radius: 0 !important;
-            background: #050B20 !important;
+            background: #01003d !important;
             color: white !important;
           }
           .brand-bg-primary { background-color: #FECC00 !important; }
           h1, h2, h3, h4, p, li, span { color: inherit !important; font-weight: 400 !important; }
+          .font-bold { font-weight: 700 !important; }
           img { -webkit-print-color-adjust: exact; }
+          footer { page-break-inside: avoid; }
         }
       `}</style>
     </div>
