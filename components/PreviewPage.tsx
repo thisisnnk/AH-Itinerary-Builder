@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ItineraryData } from '../types';
 import { 
   Printer, Edit2, ArrowLeft, MapPin, Calendar, Users, 
-  Briefcase, Phone, Mail, Navigation, Car, Heart, CheckCircle2, XCircle, CreditCard, Star, Clock, Globe, Building, Plane 
+  Briefcase, Phone, Mail, Navigation, Car, Heart, CheckCircle2, XCircle, CreditCard, Star, Clock, Globe, Building, Plane, Download, Loader2
 } from 'lucide-react';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface Props {
   data: ItineraryData;
@@ -12,6 +14,8 @@ interface Props {
 }
 
 const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
+  const [isDownloading, setIsDownloading] = useState(false);
+
   const getDayDate = (dayNum: number, specificDate?: string) => {
     if (specificDate) {
       const d = new Date(specificDate);
@@ -27,6 +31,48 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
       formatted: date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }),
       dayName: date.toLocaleDateString('en-GB', { weekday: 'long' })
     };
+  };
+
+  const handleDownloadPDF = async () => {
+    const element = document.getElementById('printable-area');
+    if (!element) return;
+
+    setIsDownloading(true);
+    try {
+      // Small delay to ensure any transitions are settled
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const canvas = await html2canvas(element, {
+        useCORS: true,
+        scale: 2, // Higher quality
+        backgroundColor: '#01003d',
+        logging: false,
+        windowWidth: 1000, // Force consistent width for capture
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      
+      // Calculate dimensions in points (72 points per inch)
+      // jsPDF format [width, height] in chosen unit
+      const pdfWidth = canvas.width;
+      const pdfHeight = canvas.height;
+
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [pdfWidth, pdfHeight]
+      });
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      
+      const fileName = `${data.tripSummary.leadTraveler.replace(/\s+/g, '_')}_Itinerary.pdf`;
+      pdf.save(fileName);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const overviewCards = [
@@ -51,8 +97,17 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
           <button onClick={onEdit} className="p-4 bg-white border border-slate-100 rounded-2xl hover:bg-slate-50 shadow-sm transition-all text-[#01003d]">
             <Edit2 size={24} />
           </button>
-          <button onClick={() => window.print()} className="adv-btn-primary px-8 shadow-2xl font-normal">
-            <Printer size={24} /> Print itinerary
+          <button 
+            onClick={handleDownloadPDF} 
+            disabled={isDownloading}
+            className="adv-btn-primary px-8 shadow-2xl font-normal disabled:opacity-50"
+          >
+            {isDownloading ? (
+              <Loader2 size={24} className="animate-spin" />
+            ) : (
+              <Download size={24} />
+            )}
+            {isDownloading ? 'Generating...' : 'Download PDF'}
           </button>
         </div>
       </div>
@@ -63,7 +118,7 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
           <img 
             src="https://www.adventureholidays.co/logo.png" 
             alt="Adventure holidays" 
-            className="h-48 mx-auto mb-48" 
+            className="h-48 mx-auto mb-80" 
           />
           
           <div className="space-y-6">
