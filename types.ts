@@ -12,6 +12,13 @@ export interface CustomField {
   value: string;
 }
 
+export interface PricingSlot {
+  id: string;
+  label: string;
+  price: string;
+  unit: string;
+}
+
 export interface TripSummary {
   consultant: Consultant;
   quotationDate: string;
@@ -23,12 +30,7 @@ export interface TripSummary {
   duration: string;
   destinations: string[];
   transport: string;
-  costWithFood: string;
-  costWithFoodLabel: string;
-  costWithoutFood: string;
-  costWithoutFoodLabel: string;
-  costUnit: string;
-  hasNoFoodCost: boolean;
+  pricingSlots: PricingSlot[];
 }
 
 export interface ItineraryDay {

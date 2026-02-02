@@ -51,12 +51,9 @@ export const INITIAL_ITINERARY_DATA = (id: string = ''): ItineraryData => ({
     duration: '2N/3D',
     destinations: [],
     transport: 'Private Vehicle',
-    costWithFood: '',
-    costWithFoodLabel: 'Inclusive of all meals',
-    costWithoutFood: '',
-    costWithoutFoodLabel: 'Room & breakfast only',
-    costUnit: 'Per Pax',
-    hasNoFoodCost: true
+    pricingSlots: [
+      { id: 'default-1', label: 'Inclusive of all meals', price: '', unit: 'Per Pax' }
+    ]
   },
   itinerary: [
     { day: 0, title: 'Pre-Arrival Notes', activities: [], images: [], isDisabled: true },
@@ -91,6 +88,10 @@ export const MOCK_ITINERARIES = (): ItineraryData[] => {
     itin.tripSummary.destinations = ['Munnar', 'Thekkady', 'Alleppey'];
     itin.tripSummary.duration = '3N/4D';
     itin.tripSummary.groupSize = (i % 4) + 2;
+    itin.tripSummary.pricingSlots = [
+      { id: 'mock-p-1', label: 'Inclusive of all meals', price: '₹ 15,500', unit: 'Per Pax' },
+      { id: 'mock-p-2', label: 'Room & breakfast only', price: '₹ 12,000', unit: 'Per Pax' }
+    ];
     return itin;
   });
 };

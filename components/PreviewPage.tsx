@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ItineraryData } from '../types';
 import { 
@@ -200,37 +201,46 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
             ))}
           </div>
 
-          {/* New Costing Section */}
-          <div className="p-12 brand-bg-primary rounded-[40px] flex flex-col md:flex-row justify-between items-center gap-12 shadow-2xl border-none relative overflow-hidden group mt-12 w-full">
-            <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-700">
-               <CreditCard size={120} className="text-[#01003d]" />
-            </div>
-            
-            <div className="flex items-center gap-6 relative z-10 shrink-0">
-              <div className="w-16 h-16 rounded-2xl bg-[#01003d]/10 flex items-center justify-center border border-[#01003d]/5">
-                <CreditCard className="text-[#01003d]" size={32} />
+          {/* New Dynamic Costing Section */}
+          {(data.tripSummary.pricingSlots && data.tripSummary.pricingSlots.length > 0) && (
+            <div className="p-12 brand-bg-primary rounded-[40px] flex flex-col justify-center items-center gap-12 shadow-2xl border-none relative overflow-hidden group mt-12 w-full">
+              <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-700">
+                 <CreditCard size={120} className="text-[#01003d]" />
               </div>
-              <div className="space-y-0.5">
-                <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#01003d]/40">Investment</p>
-                <p className="text-2xl font-black text-[#01003d] font-['Montserrat',sans-serif] leading-tight">PACKAGE COST</p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 relative z-10 text-center md:text-left flex-1 justify-end">
-              <div className="space-y-1">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#01003d]/50 leading-tight">{data.tripSummary.costWithFoodLabel}</p>
-                <p className="text-6xl font-normal text-[#01003d] tracking-tighter whitespace-nowrap leading-none">{data.tripSummary.costWithFood || 'On Request'}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-[#01003d]/60 mt-1">{data.tripSummary.costUnit}</p>
-              </div>
-              {data.tripSummary.hasNoFoodCost && (
-                <div className="space-y-1 border-l border-[#01003d]/10 pl-12">
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#01003d]/50 leading-tight">{data.tripSummary.costWithoutFoodLabel}</p>
-                  <p className="text-6xl font-normal text-[#01003d] tracking-tighter whitespace-nowrap leading-none">{data.tripSummary.costWithoutFood || 'On Request'}</p>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#01003d]/60 mt-1">{data.tripSummary.costUnit}</p>
+              
+              <div className="w-full flex flex-col md:flex-row justify-between items-center gap-12 relative z-10">
+                <div className="flex items-center gap-6 shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-[#01003d]/10 flex items-center justify-center border border-[#01003d]/5">
+                    <CreditCard className="text-[#01003d]" size={32} />
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#01003d]/40">Investment</p>
+                    <p className="text-2xl font-black text-[#01003d] font-['Montserrat',sans-serif] leading-tight">PACKAGE COST</p>
+                  </div>
                 </div>
-              )}
+
+                <div className={`grid gap-12 text-center md:text-left flex-1 justify-end relative z-10 ${
+                  data.tripSummary.pricingSlots.length === 1 ? 'grid-cols-1' : 
+                  data.tripSummary.pricingSlots.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 
+                  'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                }`}>
+                  {data.tripSummary.pricingSlots.map((slot, index) => (
+                    <div key={slot.id} className={`space-y-1 ${index > 0 ? 'border-l border-[#01003d]/10 pl-12' : ''}`}>
+                      <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#01003d]/50 leading-tight">
+                        {slot.label}
+                      </p>
+                      <p className="text-6xl font-normal text-[#01003d] tracking-tighter whitespace-nowrap leading-none">
+                        {slot.price || 'On Request'}
+                      </p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-[#01003d]/60 mt-1">
+                        {slot.unit}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </section>
 
         <div className="pt-24"></div>

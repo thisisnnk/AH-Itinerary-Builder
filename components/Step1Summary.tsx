@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ItineraryData, CustomField } from '../types';
+import { ItineraryData, CustomField, PricingSlot } from '../types';
 import { Plus, Trash2 } from 'lucide-react';
 
 interface Props {
@@ -30,6 +30,29 @@ const Step1Summary: React.FC<Props> = ({ data, updateData }) => {
 
   const removeCustomField = (id: string) => {
     updateData({ customFields: data.customFields.filter(f => f.id !== id) });
+  };
+
+  // Pricing Slot Handlers
+  const addPricingSlot = () => {
+    const newSlot: PricingSlot = {
+      id: Math.random().toString(36).substr(2, 9),
+      label: 'New Cost Slot',
+      price: '',
+      unit: 'Per Pax'
+    };
+    handleSummaryChange('pricingSlots', [...(data.tripSummary.pricingSlots || []), newSlot]);
+  };
+
+  const updatePricingSlot = (id: string, updates: Partial<PricingSlot>) => {
+    const updatedSlots = data.tripSummary.pricingSlots.map(s => 
+      s.id === id ? { ...s, ...updates } : s
+    );
+    handleSummaryChange('pricingSlots', updatedSlots);
+  };
+
+  const removePricingSlot = (id: string) => {
+    const updatedSlots = data.tripSummary.pricingSlots.filter(s => s.id !== id);
+    handleSummaryChange('pricingSlots', updatedSlots);
   };
 
   return (
@@ -135,51 +158,64 @@ const Step1Summary: React.FC<Props> = ({ data, updateData }) => {
         </div>
       </section>
 
-      {/* 6. Costing */}
+      {/* 6. Costing (Revised for multiple dynamic slots) */}
       <section className="space-y-10">
         <div className="flex justify-between items-center border-l-4 border-yellow-400 pl-4">
            <h3 className="text-sm font-normal text-slate-400">6. Costing</h3>
-           <div className="flex items-center gap-3">
-              <span className="text-[11px] font-normal text-slate-400">Enable second cost slot</span>
-              <label className="switch">
-                <input 
-                  type="checkbox" 
-                  checked={data.tripSummary.hasNoFoodCost}
-                  onChange={e => handleSummaryChange('hasNoFoodCost', e.target.checked)}
-                />
-                <span className="slider"></span>
-              </label>
-           </div>
+           <button onClick={addPricingSlot} className="text-[11px] font-normal text-blue-600 flex items-center gap-1">
+             <Plus size={14} /> Add pricing slot
+           </button>
         </div>
-        <div className="space-y-8 bg-slate-50/50 p-8 rounded-[24px]">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
-            <div className="adv-input-group mb-0">
-              <label className="adv-label">Cost slot 1 label</label>
-              <input className="adv-input font-normal" value={data.tripSummary.costWithFoodLabel} onChange={e => handleSummaryChange('costWithFoodLabel', e.target.value)} placeholder="e.g. Inclusive of all meals" />
-            </div>
-            <div className="adv-input-group mb-0">
-              <label className="adv-label">Price</label>
-              <input className="adv-input font-normal" placeholder="₹ 15,000" value={data.tripSummary.costWithFood} onChange={e => handleSummaryChange('costWithFood', e.target.value)} />
-            </div>
-          </div>
-
-          {data.tripSummary.hasNoFoodCost && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-end animate-in fade-in slide-in-from-right-4">
-              <div className="adv-input-group mb-0">
-                <label className="adv-label">Cost slot 2 label</label>
-                <input className="adv-input font-normal" value={data.tripSummary.costWithoutFoodLabel} onChange={e => handleSummaryChange('costWithoutFoodLabel', e.target.value)} placeholder="e.g. Room & breakfast only" />
+        
+        <div className="space-y-8">
+          {(data.tripSummary.pricingSlots || []).map((slot, index) => (
+            <div key={slot.id} className="bg-slate-50/50 p-8 rounded-[24px] relative group animate-in fade-in slide-in-from-right-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-end">
+                <div className="adv-input-group mb-0">
+                  <label className="adv-label">Slot {index + 1} label</label>
+                  <input 
+                    className="adv-input font-normal" 
+                    value={slot.label} 
+                    onChange={e => updatePricingSlot(slot.id, { label: e.target.value })} 
+                    placeholder="e.g. Inclusive of all meals" 
+                  />
+                </div>
+                <div className="adv-input-group mb-0">
+                  <label className="adv-label">Price</label>
+                  <input 
+                    className="adv-input font-normal" 
+                    placeholder="₹ 15,000" 
+                    value={slot.price} 
+                    onChange={e => updatePricingSlot(slot.id, { price: e.target.value })} 
+                  />
+                </div>
+                <div className="adv-input-group mb-0 flex gap-2">
+                  <div className="flex-1">
+                    <label className="adv-label">Unit</label>
+                    <input 
+                      className="adv-input font-normal" 
+                      placeholder="e.g. Per Pax" 
+                      value={slot.unit} 
+                      onChange={e => updatePricingSlot(slot.id, { unit: e.target.value })} 
+                    />
+                  </div>
+                  {data.tripSummary.pricingSlots.length > 1 && (
+                    <button 
+                      onClick={() => removePricingSlot(slot.id)} 
+                      className="p-3 text-red-400 hover:bg-red-50 rounded-lg"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="adv-input-group mb-0">
-                <label className="adv-label">Price</label>
-                <input className="adv-input font-normal" placeholder="₹ 12,000" value={data.tripSummary.costWithoutFood} onChange={e => handleSummaryChange('costWithoutFood', e.target.value)} />
-              </div>
+            </div>
+          ))}
+          {(!data.tripSummary.pricingSlots || data.tripSummary.pricingSlots.length === 0) && (
+            <div className="text-center py-10 bg-slate-50 rounded-[24px]">
+               <p className="text-xs text-slate-300">Click "Add pricing slot" to set the package cost.</p>
             </div>
           )}
-
-          <div className="adv-input-group pt-4 border-t border-slate-200">
-            <label className="adv-label">Cost unit (Shown under price)</label>
-            <input className="adv-input font-normal max-w-xs" placeholder="e.g. Per Pax, Per Person" value={data.tripSummary.costUnit} onChange={e => handleSummaryChange('costUnit', e.target.value)} />
-          </div>
         </div>
       </section>
 
