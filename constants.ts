@@ -1,5 +1,4 @@
-
-import { ItineraryData, DayTemplate } from './types';
+import { ItineraryData } from './types';
 
 export const DEFAULT_TC = [
   "Package confirmation will only be upon half of the payment and the balance before 72 Hours of Departure.",
@@ -22,18 +21,6 @@ export const DEFAULT_CANCELLATION = [
   "15 days prior to Tour: 25% of the Tour Package.",
   "07 days prior to Tour: 50% of the Tour Package.",
   "72 hours prior to Tour OR No Show: No Refund."
-];
-
-export const MOCK_TEMPLATES: DayTemplate[] = [
-  { id: '1', keyword: 'Munnar1Day', title: 'Munnar Arrival & Sightseeing', activities: ['Arrival at Kochi', 'Transfer to Munnar', 'Cheeyappara Waterfalls', 'Tea Museum visit'] },
-  { id: '2', keyword: 'Ooty1Day', title: 'Ooty Local Sightseeing', activities: ['Botanical Garden', 'Rose Garden', 'Ooty Lake', 'Doddabetta Peak'] },
-  { id: '3', keyword: 'Mysore1Day', title: 'Royal Mysore Experience', activities: ['Mysore Palace', 'Chamundi Hills', 'St. Philomena\'s Church', 'Brindavan Gardens'] },
-  ...Array.from({ length: 47 }).map((_, i) => ({
-    id: `mock-${i}`,
-    keyword: `Template${i + 4}`,
-    title: `Day Plan Template ${i + 4}`,
-    activities: ['Activity 1', 'Activity 2', 'Activity 3']
-  }))
 ];
 
 export const INITIAL_ITINERARY_DATA = (id: string = ''): ItineraryData => ({
@@ -73,25 +60,3 @@ export const INITIAL_ITINERARY_DATA = (id: string = ''): ItineraryData => ({
   showDayZero: false,
   customFields: []
 });
-
-export const MOCK_ITINERARIES = (): ItineraryData[] => {
-  const categories = ['DOM', 'INTL'];
-  const types = ['FIT', 'SCH', 'CLG', 'COR', 'CPL', 'GD'];
-  const clients = ['Arun Kumar', 'Deepak S', 'Meera V', 'Rajesh K', 'Sowmya R'];
-  
-  return Array.from({ length: 25 }).map((_, i) => {
-    const cat = categories[i % 2];
-    const type = types[i % 6];
-    const itin = INITIAL_ITINERARY_DATA(`mock-itin-${i}`);
-    itin.quotationNumber = `AH26-${cat}-${type}-${String(i + 1).padStart(3, '0')}`;
-    itin.tripSummary.leadTraveler = clients[i % clients.length];
-    itin.tripSummary.destinations = ['Munnar', 'Thekkady', 'Alleppey'];
-    itin.tripSummary.duration = '3N/4D';
-    itin.tripSummary.groupSize = (i % 4) + 2;
-    itin.tripSummary.pricingSlots = [
-      { id: 'mock-p-1', label: 'Inclusive of all meals', price: '₹ 15,500', unit: 'Per Pax' },
-      { id: 'mock-p-2', label: 'Room & breakfast only', price: '₹ 12,000', unit: 'Per Pax' }
-    ];
-    return itin;
-  });
-};

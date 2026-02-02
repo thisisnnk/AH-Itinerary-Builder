@@ -1,15 +1,15 @@
-
 import React, { useState } from 'react';
 import { ArrowLeft, Plus, Trash2, Edit2, Save } from 'lucide-react';
 import { DayTemplate } from '../types';
 
 interface Props {
   templates: DayTemplate[];
-  onSave: (list: DayTemplate[]) => void;
+  onSave: (template: DayTemplate) => void;
+  onDelete: (id: string) => void;
   onBack: () => void;
 }
 
-const KeywordManager: React.FC<Props> = ({ templates, onSave, onBack }) => {
+const KeywordManager: React.FC<Props> = ({ templates, onSave, onDelete, onBack }) => {
   const [keyword, setKeyword] = useState('');
   const [plan, setPlan] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -17,27 +17,22 @@ const KeywordManager: React.FC<Props> = ({ templates, onSave, onBack }) => {
   const handleAdd = () => {
     if (!keyword || !plan) return alert('Both fields are required');
     
-    if (editingId) {
-      const updated = templates.map(t => t.id === editingId ? { ...t, keyword, activities: plan.split('\n') } : t);
-      onSave(updated);
-      setEditingId(null);
-    } else {
-      const newTemp: DayTemplate = {
-        id: Math.random().toString(36).substr(2, 9),
-        keyword,
-        title: `Plan: ${keyword}`,
-        activities: plan.split('\n')
-      };
-      onSave([newTemp, ...templates]);
-    }
+    const template: DayTemplate = {
+      id: editingId || Math.random().toString(36).substr(2, 9),
+      keyword,
+      title: `Plan: ${keyword}`,
+      activities: plan.split('\n').filter(a => a.trim() !== '')
+    };
+    
+    onSave(template);
     setKeyword('');
     setPlan('');
+    setEditingId(null);
   };
 
   const handleDelete = (id: string) => {
     if (window.confirm('Are you sure you want to delete this keyword template?')) {
-      const filtered = templates.filter(t => t.id !== id);
-      onSave(filtered);
+      onDelete(id);
     }
   };
 
@@ -86,6 +81,11 @@ const KeywordManager: React.FC<Props> = ({ templates, onSave, onBack }) => {
           <button onClick={handleAdd} className="adv-btn-primary w-full py-4 text-lg font-normal">
             {editingId ? <><Save size={20} /> Update template</> : <><Plus size={24} /> Add template</>}
           </button>
+          {editingId && (
+            <button onClick={() => { setEditingId(null); setKeyword(''); setPlan(''); }} className="w-full text-sm text-slate-400 py-2">
+              Cancel editing
+            </button>
+          )}
         </div>
       </div>
 
