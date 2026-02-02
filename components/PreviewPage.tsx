@@ -74,7 +74,8 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
       pdf.addImage(imgData, 'JPEG', margin, margin, canvas.width, canvas.height);
       
       const destStr = data.tripSummary.destinations.join(', ');
-      const fileName = `${data.quotationNumber} - ${data.tripSummary.leadTraveler} - ${destStr} - ${data.tripSummary.duration}.pdf`;
+      // Added group size (Pax) at the end of the filename as requested
+      const fileName = `${data.quotationNumber} - ${data.tripSummary.leadTraveler} - ${destStr} - ${data.tripSummary.duration} - ${data.tripSummary.groupSize} Pax.pdf`;
       pdf.save(fileName);
     } catch (error) {
       console.error('Error generating PDF:', error);
