@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ItineraryData } from '../types';
 import { 
@@ -75,7 +74,6 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
       pdf.addImage(imgData, 'JPEG', margin, margin, canvas.width, canvas.height);
       
       const destStr = data.tripSummary.destinations.join(', ');
-      // Added group size (Pax) at the end of the filename as requested
       const fileName = `${data.quotationNumber} - ${data.tripSummary.leadTraveler} - ${destStr} - ${data.tripSummary.duration} - ${data.tripSummary.groupSize} Pax.pdf`;
       pdf.save(fileName);
     } catch (error) {
@@ -201,7 +199,24 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
             ))}
           </div>
 
-          {/* New Dynamic Costing Section */}
+          {/* Custom Information Cards */}
+          {data.customFields && data.customFields.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+              {data.customFields.map((field) => (
+                <div key={field.id} className="p-8 bg-white/[0.03] border border-white/10 rounded-[32px] group">
+                  <div className="flex items-center gap-5 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-yellow-400/50 transition-colors">
+                      <MessageSquare className="brand-text-primary" size={20} />
+                    </div>
+                    <p className="text-[10px] font-normal text-white/70 uppercase tracking-[0.2em]">{field.heading}</p>
+                  </div>
+                  <p className="text-2xl font-normal leading-tight brand-text-primary break-words">{field.value}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Dynamic Costing Section */}
           {(data.tripSummary.pricingSlots && data.tripSummary.pricingSlots.length > 0) && (
             <div className="p-12 brand-bg-primary rounded-[40px] flex flex-col justify-center items-center gap-12 shadow-2xl border-none relative overflow-hidden group mt-12 w-full">
               <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-700">
