@@ -212,9 +212,9 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
                     <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-yellow-400/50 transition-colors">
                       <card.icon className="brand-text-primary" size={20} />
                     </div>
-                    <p className="text-[10px] font-normal text-white/70 uppercase tracking-[0.2em]">{card.label}</p>
+                    <p className="text-[18px] font-['Poppins',sans-serif] font-medium text-white/70">{card.label}</p>
                   </div>
-                  <p className="text-2xl font-normal leading-tight brand-text-primary break-words">{card.val}</p>
+                  <p className="text-xl font-normal text-white leading-relaxed break-words">{card.val}</p>
                 </div>
               ))}
             </div>
@@ -225,9 +225,9 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
                     <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-yellow-400/50 transition-colors">
                       <card.icon className="brand-text-primary" size={20} />
                     </div>
-                    <p className="text-[10px] font-normal text-white/70 uppercase tracking-[0.2em]">{card.label}</p>
+                    <p className="text-[18px] font-['Poppins',sans-serif] font-medium text-white/70">{card.label}</p>
                   </div>
-                  <p className="text-2xl font-normal leading-tight brand-text-primary break-words">{card.val}</p>
+                  <p className="text-xl font-normal text-white leading-relaxed break-words">{card.val}</p>
                 </div>
               ))}
             </div>
@@ -238,9 +238,9 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
                     <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-yellow-400/50 transition-colors">
                       <card.icon className="brand-text-primary" size={20} />
                     </div>
-                    <p className="text-[10px] font-normal text-white/70 uppercase tracking-[0.2em]">{card.label}</p>
+                    <p className="text-[18px] font-['Poppins',sans-serif] font-medium text-white/70">{card.label}</p>
                   </div>
-                  <p className="text-2xl font-normal leading-tight brand-text-primary break-words">{card.val}</p>
+                  <p className="text-xl font-normal text-white leading-relaxed break-words">{card.val}</p>
                 </div>
               ))}
             </div>
@@ -252,47 +252,41 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
                       <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-yellow-400/50 transition-colors">
                         <MessageSquare className="brand-text-primary" size={20} />
                       </div>
-                      <p className="text-[10px] font-normal text-white/70 uppercase tracking-[0.2em]">{field.heading}</p>
+                      <p className="text-[18px] font-['Poppins',sans-serif] font-medium text-white/70">{field.heading}</p>
                     </div>
-                    <p className="text-2xl font-normal leading-tight brand-text-primary break-words">{field.value}</p>
+                    <p className="text-xl font-normal text-white leading-relaxed break-words">{field.value}</p>
                   </div>
                 ))}
               </div>
             )}
             {(data.tripSummary.pricingSlots && data.tripSummary.pricingSlots.length > 0) && (
-              <div className="p-12 brand-bg-primary rounded-[40px] flex flex-col justify-center items-center gap-12 shadow-2xl border-none relative overflow-hidden group mt-12 w-full">
-                <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-700">
-                  <CreditCard size={120} className="text-[#01003d]" />
-                </div>
-                <div className="w-full flex flex-col md:flex-row justify-between items-center gap-12 relative z-10">
-                  <div className="flex items-center gap-6 shrink-0">
-                    <div className="w-16 h-16 rounded-2xl bg-[#01003d]/10 flex items-center justify-center border border-[#01003d]/5">
-                      <CreditCard className="text-[#01003d]" size={32} />
+              <div className={`grid gap-8 mt-8 ${data.tripSummary.pricingSlots.length === 1 ? 'grid-cols-1' :
+                data.tripSummary.pricingSlots.length === 2 ? 'grid-cols-1 md:grid-cols-2' :
+                  'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                }`}>
+                {data.tripSummary.pricingSlots.map((slot) => (
+                  <div key={slot.id} className="p-12 brand-bg-primary rounded-[40px] flex flex-col justify-center items-center gap-6 shadow-2xl border-none relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none group-hover:scale-110 transition-transform duration-700">
+                      <CreditCard size={80} className="text-[#01003d]" />
                     </div>
-                    <div className="space-y-0.5">
-                      <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#01003d]/40">Investment</p>
-                      <p className="text-2xl font-black text-[#01003d] font-['Montserrat',sans-serif] leading-tight">PACKAGE COST</p>
-                    </div>
-                  </div>
-                  <div className={`grid gap-12 text-center md:text-left flex-1 justify-end relative z-10 ${data.tripSummary.pricingSlots.length === 1 ? 'grid-cols-1' :
-                    data.tripSummary.pricingSlots.length === 2 ? 'grid-cols-1 sm:grid-cols-2' :
-                      'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                    }`}>
-                    {data.tripSummary.pricingSlots.map((slot, index) => (
-                      <div key={slot.id} className={`space-y-1 ${index > 0 ? 'border-l border-[#01003d]/10 pl-12' : ''}`}>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#01003d]/50 leading-tight">
-                          {slot.label}
-                        </p>
-                        <p className="text-6xl font-normal text-[#01003d] tracking-tighter whitespace-nowrap leading-none">
-                          {slot.price || 'On Request'}
-                        </p>
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-[#01003d]/60 mt-1">
-                          {slot.unit}
+                    <div className="relative z-10 flex flex-col items-center text-center gap-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-[#01003d]/10 flex items-center justify-center border border-[#01003d]/5">
+                          <CreditCard className="text-[#01003d]" size={24} />
+                        </div>
+                        <p className="text-sm font-['Poppins',sans-serif] font-normal text-[#01003d]/80">
+                          {slot.label.replace(/^Plan:\s*/i, '')}
                         </p>
                       </div>
-                    ))}
+                      <p className="text-5xl md:text-6xl font-normal text-[#01003d] tracking-tighter whitespace-nowrap leading-none">
+                        {slot.price || 'On Request'}
+                      </p>
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-[#01003d]/60">
+                        {slot.unit}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             )}
           </section>
@@ -311,7 +305,7 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
                   <div key={i} className="group border-b border-white/5 pb-32 last:border-0">
                     <div className="flex flex-col md:flex-row gap-24">
                       <div className="shrink-0 text-center md:text-left min-w-[180px]">
-                        <div className="text-[150px] font-black text-white/10 group-hover:brand-text-primary leading-none transition-colors duration-500">{String(day.day).padStart(2, '0')}</div>
+                        <div className="text-[150px] font-black text-white/25 group-hover:brand-text-primary leading-none transition-colors duration-500">{String(day.day).padStart(2, '0')}</div>
                         <div className="text-[16px] font-normal text-white/70 mt-4 uppercase tracking-[0.2em]">{getDayDate(day.day, day.date).formatted}</div>
                         <div className="text-[14px] font-normal brand-text-primary mt-1 uppercase tracking-[0.1em]">{getDayDate(day.day, day.date).dayName}</div>
                       </div>
@@ -375,15 +369,7 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
           </section>
 
           {/* --- CONSULTANT CARD --- */}
-          <section className="py-24 space-y-12 border-b border-white/5 relative z-10 flex flex-col items-center text-center">
-            <div className="space-y-4">
-              <p className="text-2xl md:text-3xl font-['Gloock',serif] italic leading-none text-white">
-                need further <span className="text-[#FECC00] not-italic font-['Montserrat'] font-black uppercase">customized</span>
-              </p>
-              <h2 className="text-5xl md:text-[70px] font-['Montserrat',sans-serif] font-black brand-text-primary uppercase tracking-tighter leading-none">
-                Tour Package?
-              </h2>
-            </div>
+          <section className="pt-0 pb-12 space-y-12 border-b border-white/5 relative z-10 flex flex-col items-center text-center">
 
             <div className="p-12 bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-[40px] max-w-3xl w-full mx-auto relative group overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -393,16 +379,16 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
                   <Headset size={48} />
                 </div>
 
-                <div className="space-y-4">
-                  <p className="text-xl font-['Poppins'] italic text-white/80 pb-2">Our Travel Expert</p>
+                <div className="space-y-2">
+                  <p className="text-xl text-white font-normal leading-tight">Your Travel Consultant</p>
 
-                  <div className="space-y-1">
-                    <h3 className="text-3xl md:text-5xl font-['Montserrat',sans-serif] font-black brand-text-primary uppercase tracking-tighter leading-none">
+                  <div>
+                    <h3 className="text-3xl md:text-5xl font-['Montserrat',sans-serif] font-black brand-text-primary uppercase tracking-tight leading-none">
                       {data.tripSummary.consultant?.name || 'Expert Consultant'} {data.tripSummary.consultant?.contact ? `- ${data.tripSummary.consultant.contact}` : ''}
                     </h3>
                   </div>
 
-                  <p className="text-xl font-['Poppins'] italic text-white/80 pt-2">
+                  <p className="text-xl text-white font-normal leading-tight">
                     is here to fulfill your wishes
                   </p>
                 </div>
@@ -453,7 +439,7 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
             </div>
             <div className="w-full text-left space-y-4 px-4 md:px-0">
               <h3 className="text-4xl md:text-5xl font-['Montserrat',sans-serif] font-black brand-text-primary uppercase tracking-tighter">ABOUT US:</h3>
-              <p className="text-2xl md:text-3xl text-white font-bold leading-[1.3] max-w-none">
+              <p className="text-xl text-white font-normal leading-relaxed max-w-none">
                 Adventure Holidays is a travel agency offering domestic and international tour packages, designed to plan, manage, and deliver complex travel experiences at scale with institutional-grade precision
               </p>
             </div>
@@ -465,11 +451,11 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-16 text-center">
             <div className="space-y-4">
               <h4 className="text-9xl md:text-[140px] font-['Bebas_Neue',cursive] brand-text-primary leading-none tracking-tight">25000+</h4>
-              <p className="text-xl md:text-2xl font-bold leading-tight max-w-[320px] mx-auto text-white/80">Travelers holding memories crafted by us</p>
+              <p className="text-xl text-white font-normal leading-relaxed max-w-[320px] mx-auto">Travelers holding memories crafted by us</p>
             </div>
             <div className="space-y-4">
               <h4 className="text-9xl md:text-[120px] font-['Bebas_Neue',cursive] brand-text-primary leading-none tracking-tight">1500+</h4>
-              <p className="text-xl md:text-2xl font-bold leading-tight max-w-[320px] mx-auto text-white/80">Journeys executed with institutional-grade precision</p>
+              <p className="text-xl text-white font-normal leading-relaxed max-w-[320px] mx-auto">Journeys executed with institutional-grade precision</p>
             </div>
           </div>
 
@@ -510,13 +496,13 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
                   <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-[#FECC00] group-hover:brand-bg-primary group-hover:text-[#01003d] transition-all border border-white/5">
                     <Globe size={32} />
                   </div>
-                  <p className="text-2xl md:text-3xl font-['Poppins',sans-serif] font-normal text-white hover:brand-text-primary transition-colors cursor-pointer">www.adventureholidays.co</p>
+                  <p className="text-xl text-white font-normal leading-relaxed hover:brand-text-primary transition-colors cursor-pointer">www.adventureholidays.co</p>
                 </div>
                 <div className="flex items-center gap-6 group">
                   <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-[#FECC00] group-hover:brand-bg-primary group-hover:text-[#01003d] transition-all border border-white/5">
                     <Mail size={32} />
                   </div>
-                  <p className="text-2xl md:text-3xl font-['Poppins',sans-serif] font-normal text-white hover:brand-text-primary transition-colors cursor-pointer">contact@adventureholidays.co</p>
+                  <p className="text-xl text-white font-normal leading-relaxed hover:brand-text-primary transition-colors cursor-pointer">contact@adventureholidays.co</p>
                 </div>
               </div>
 
@@ -525,7 +511,7 @@ const PreviewPage: React.FC<Props> = ({ data, onEdit, onBack }) => {
                   <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" /></svg>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-2xl md:text-3xl font-['Poppins',sans-serif] font-normal leading-tight text-white/90">
+                  <p className="text-xl text-white font-normal leading-relaxed">
                     2nd Floor, Vishnu Complex,<br />
                     1st Cross Street, Gandhipuram<br />
                     Coimbatore - 641012
